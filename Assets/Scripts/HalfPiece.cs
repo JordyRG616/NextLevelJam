@@ -13,7 +13,7 @@ public class HalfPiece : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private int rotationIndex;
     public int value;
     public int previewDisabled;
-
+    private bool registered;
 
     private void Start()
     {
@@ -36,14 +36,23 @@ public class HalfPiece : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             rotationPoints.Add(pivot.position - (Vector3)Vector2.Perpendicular(pos.normalized));
 
             OnRotatePressed.Register(Rotate);
+            registered = true;
         } else
         {
-            OnRotatePressed.Delist(Rotate);
+            DelistRotation();
         }
+    }
+
+    public void DelistRotation()
+    {
+        Debug.Log("Delisted Rotation");
+        OnRotatePressed.Delist(Rotate);
+        registered = false;
     }
 
     private void Rotate()
     {
+        if (transform == null || !registered) return;
         rotationIndex++;
         if (rotationIndex >= rotationPoints.Count) rotationIndex = 0;
 

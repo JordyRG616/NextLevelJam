@@ -5,6 +5,7 @@ using UnityEngine;
 public class DominoSet : MonoBehaviour
 {
     [SerializeField] private ScriptableSignal OnDominoPlayed;
+    [SerializeField] private ScriptableSignal OnGameOver;
     [Space]
     [SerializeField] private Domino dominoModel;
     [SerializeField] private Transform hand;
@@ -15,12 +16,7 @@ public class DominoSet : MonoBehaviour
     private void Start()
     {
         CreateDeck();
-
-        var rdm = Random.Range(0, transform.childCount);
-        var first = transform.GetChild(rdm);
-        first.SetParent(null);
-        first.position = Vector3.zero;
-        first.GetComponent<Domino>().SimplePlace();
+        CreateDeck();
 
         for (int i = 0; i < handSize; i++)
         {
@@ -33,6 +29,11 @@ public class DominoSet : MonoBehaviour
     private void CheckDraw()
     {
         Draw();
+
+        if (transform.childCount == 0 && hand.childCount == 0)
+        {
+            OnGameOver.Fire();
+        }
     }
 
     private void CreateDeck()
@@ -41,6 +42,7 @@ public class DominoSet : MonoBehaviour
         {
             for (int j = i; j < icons.Count; j++)
             {
+                if (i == j) continue;
                 var domino = Instantiate(dominoModel, transform);
                 domino.transform.localPosition = Vector3.zero;
                 domino.ReceiveIcons(icons[i], icons[j]);
@@ -48,11 +50,15 @@ public class DominoSet : MonoBehaviour
         }
     }
 
-    private Transform Draw()
+    private void Draw()
     {
+        if (transform.childCount == 0)
+        {
+            return;
+        }
         var rdm = Random.Range(0, transform.childCount);
         var piece = transform.GetChild(rdm);
         piece.SetParent(hand);
-        return piece;
+        piece.localScale = Vector3.one;
     }
 }

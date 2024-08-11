@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - Piece
-  - 
+  - City
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Scenery
+    uniqueID: 1462164789
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Hand
+    uniqueID: 1287020245
     locked: 0

@@ -13,7 +13,10 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [Space]
     [SerializeField] private bool placed;
     [SerializeField] private GameObject outline;
-    
+
+    public BuildingType connectedBuilding { get; private set; } = BuildingType.None;
+    public bool connected;
+
     private bool selected;
     private bool hovered;
 
@@ -62,6 +65,7 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         else
         {
             OnConfirmPressed.Delist(PlaceInstance);
+            currentSelectedDomino.GetComponent<Domino>().values.ForEach(x => x.half.DelistRotation());
             currentSelectedDomino.Clear();
         }
     }
@@ -101,12 +105,31 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         values.Remove(holder);
 
         var targetDomino = target.GetComponentInParent<Domino>();
-        var holder_target = targetDomino.values.Find(x => x.half == target.gameObject);
-        targetDomino.values.Remove(holder_target);
+        if(targetDomino != null)
+        {
+            var holder_target = targetDomino.values.Find(x => x.half == target.gameObject);
+            targetDomino.values.Remove(holder_target);
+            connectedBuilding = targetDomino.connectedBuilding;
+            targetDomino.connected = true;
+        } else
+        {
+            var targetBuilding = target.GetComponentInParent<Building>();
+            targetBuilding.Occupy();
+            connectedBuilding = targetBuilding.type;
+        }
 
         var direction = otherHalf.transform.parent.position - half.transform.parent.position;
         otherHalf.transform.position = otherHalf.transform.parent.position + direction.normalized;
         otherHalf.SetRotating(false);
+
+        var hit = Physics2D.OverlapCircle(otherHalf.transform.parent.position, .2f);
+        if (hit != null)
+        {
+            if (hit.TryGetComponent<City>(out var city))
+            {
+                city.ReceiveBuilding(connectedBuilding);
+            }
+        }
 
         OnDominoPlayed.Fire();
     }
@@ -120,7 +143,7 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     private void CheckSelectedDomino(Domino selectedDomino)
     {
-        if (!placed) return;
+        if (!placed || connected) return;
 
         foreach (var value in selectedDomino.values)
         {

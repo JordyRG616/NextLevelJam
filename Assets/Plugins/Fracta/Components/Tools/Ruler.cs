@@ -10,6 +10,13 @@ public class Ruler : MonoBehaviour
     public float distance;
     public Vector3 direction;
 
+
+    private void Update()
+    {
+        direction = (to.position - from.position).normalized;
+        distance = (from.position - to.position).magnitude;
+    }
+
     private void OnDrawGizmos()
     {
         if (from == null || to == null) return;
