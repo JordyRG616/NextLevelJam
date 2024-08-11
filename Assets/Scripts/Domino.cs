@@ -7,6 +7,7 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 {
     [field:SerializeField] public ScriptableSignal OnDominoSelected { get; private set; }
     [SerializeField] private ScriptableSignal OnConfirmPressed;
+    [SerializeField] private ScriptableSignal OnDominoPlayed;
     [SerializeField] private GlobalObject currentSelectedDomino;
     [field:SerializeField] public List<DominoValue> values { get; private set; }
     [Space]
@@ -26,6 +27,12 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         OnDominoSelected.Register<Domino>(CheckSelectedDomino);
     }
 
+    public void ReceiveIcons(ScriptableEnum iconA, ScriptableEnum iconB)
+    {
+        values[0].Setup(iconA);
+        values[1].Setup(iconB);
+    }
+
     public void ConnectTo(HalfPiece target)
     {
         var half = values.Find(x => x.value == target.value).half;
@@ -36,8 +43,8 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         var direction = parent.position - target.transform.parent.position;
         otherHalf.transform.parent.position = parent.position + direction.normalized;
 
-        this.half = half.GetComponent<HalfPiece>();
-        this.otherHalf = otherHalf.GetComponent<HalfPiece>();
+        this.half = half;//.GetComponent<HalfPiece>();
+        this.otherHalf = otherHalf;//.GetComponent<HalfPiece>();
         this.target = target;
 
         this.half.SetRotating(false);
@@ -100,6 +107,15 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         var direction = otherHalf.transform.parent.position - half.transform.parent.position;
         otherHalf.transform.position = otherHalf.transform.parent.position + direction.normalized;
         otherHalf.SetRotating(false);
+
+        OnDominoPlayed.Fire();
+    }
+
+    public void SimplePlace()
+    {
+        SetColliderActive(false);
+        placed = true;
+        outline.SetActive(false);
     }
 
     private void CheckSelectedDomino(Domino selectedDomino)
@@ -112,7 +128,7 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             {
                 if(selfValue.value == value.value)
                 {
-                    selfValue.half.SetActive(true);
+                    selfValue.half.gameObject.SetActive(true);
                 }
             }
         }
@@ -141,8 +157,16 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 }
 
 [System.Serializable]
-public struct DominoValue
+public class DominoValue
 {
     public int value;
-    public GameObject half;
+    public SpriteRenderer icon;
+    public HalfPiece half;
+
+    public void Setup(ScriptableEnum source)
+    {
+        value = source.Value;
+        icon.sprite = source.Icon;
+        half.value = value;
+    }
 }

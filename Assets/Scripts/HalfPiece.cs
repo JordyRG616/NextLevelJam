@@ -30,9 +30,10 @@ public class HalfPiece : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (rotating)
         {
             rotationPoints.Clear();
+            var pos = transform.parent.position - pivot.position;
             rotationPoints.Add(transform.parent.position);
-            rotationPoints.Add(pivot.position + Vector3.right);
-            rotationPoints.Add(pivot.position + Vector3.left);
+            rotationPoints.Add(pivot.position + (Vector3)Vector2.Perpendicular(pos.normalized));
+            rotationPoints.Add(pivot.position - (Vector3)Vector2.Perpendicular(pos.normalized));
 
             OnRotatePressed.Register(Rotate);
         } else
