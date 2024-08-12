@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{e898a24d-c2e2-44e0-a2cb-68ac0058b13f}">
+		<property name="assetPath">
+			<value>CardDrop.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.18619047619047618</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{1ddbb060-b884-4c8f-8fbb-65a816de42b3}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -13,6 +13,8 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [Space]
     [SerializeField] private bool placed;
     [SerializeField] private GameObject outline;
+    [SerializeField] private SFXPlayer placedSfx;
+    [SerializeField] private SFXPlayer hoverSfx;
 
     public BuildingType connectedBuilding { get; private set; } = BuildingType.None;
     public bool connected;
@@ -86,8 +88,11 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     {
         if (hovered || !selected) return;
 
+        if (currentSelectedDomino.Reference.activeSelf == false) return;
+
         var domino = currentSelectedDomino.GetComponent<Domino>();
         domino.Place();
+        placedSfx.Play();
 
         OnConfirmPressed.Delist(PlaceInstance);
         OnDominoSelected.Delist<Domino>(CheckSelectedDomino);
@@ -105,13 +110,14 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         values.Remove(holder);
 
         var targetDomino = target.GetComponentInParent<Domino>();
-        if(targetDomino != null)
+        if (targetDomino != null)
         {
             var holder_target = targetDomino.values.Find(x => x.half == target.gameObject);
             targetDomino.values.Remove(holder_target);
             connectedBuilding = targetDomino.connectedBuilding;
             targetDomino.connected = true;
-        } else
+        }
+        else
         {
             var targetBuilding = target.GetComponentInParent<Building>();
             targetBuilding.Occupy();
@@ -131,6 +137,11 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             }
         }
 
+        Invoke("FireDominoPlaced", .15f);
+    }
+
+    private void FireDominoPlaced()
+    {
         OnDominoPlayed.Fire();
     }
 
@@ -168,6 +179,7 @@ public class Domino : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
         hovered = true;
         transform.localScale = Vector3.one * 1.1f;
+        hoverSfx.Play();
     }
 
     public void OnPointerExit(PointerEventData eventData)

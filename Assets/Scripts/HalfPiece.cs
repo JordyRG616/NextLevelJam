@@ -52,7 +52,7 @@ public class HalfPiece : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private void Rotate()
     {
-        if (transform == null || !registered) return;
+        if (!registered) return;
         rotationIndex++;
         if (rotationIndex >= rotationPoints.Count) rotationIndex = 0;
 

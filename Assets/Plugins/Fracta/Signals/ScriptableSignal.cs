@@ -14,6 +14,14 @@ public class ScriptableSignal : ScriptableObject
     private List<CustomSignalHolder> customSignals = new List<CustomSignalHolder>();
 
 
+    public void ResetToDefault()
+    {
+        defaultSignal.Clear();
+        booleanSignal.Clear();
+        floatSignal.Clear();
+        customSignals.Clear();
+    }
+
     public CustomSignalHolder<T> CreateCustomSignal<T>()
     {
         var holder = customSignals.Find(x => x.type == typeof(T));

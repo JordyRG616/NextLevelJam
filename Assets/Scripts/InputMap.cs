@@ -7,8 +7,10 @@ public class InputMap : MonoBehaviour
 {
     [SerializeField] private ScriptableSignal OnRotatePressed;
     [SerializeField] private ScriptableSignal OnConfirmPressed;
+    [SerializeField] private ScriptableSignal OnMenuPressed;
 
     private PlayerControls controls;
+    private bool menuOpen;
 
 
     void Start()
@@ -18,6 +20,13 @@ public class InputMap : MonoBehaviour
         controls.Default.Enable();
         controls.Default.Rotate.performed += Rotate_performed;
         controls.Default.Confirm.performed += Confirm_performed;
+        controls.Default.Menu.performed += Menu_performed;
+    }
+
+    private void Menu_performed(InputAction.CallbackContext obj)
+    {
+        menuOpen = !menuOpen;
+        OnMenuPressed.Fire(menuOpen);
     }
 
     private void Confirm_performed(InputAction.CallbackContext obj)

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa64fef01272104ba67a6550a57cd10, type: 3}
+  m_Name: UI_Hover
+  m_EditorClassIdentifier: 
+  sfx:
+    Guid:
+      Data1: -875848144
+      Data2: 1197957709
+      Data3: -643552345
+      Data4: 1621744142
+    Path: event:/UI_1
+  muted: 0

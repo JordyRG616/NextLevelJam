@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    private static List<ScriptableEnum> staticIcons;
+    private static List<ScriptableEnum> staticIcons = new List<ScriptableEnum>();
     [SerializeField] private ScriptableSignal OnDominoSelected;
     [SerializeField] private HalfPiece halfPiece;
     [SerializeField] private SpriteRenderer icon;
@@ -12,10 +12,14 @@ public class Building : MonoBehaviour
     [SerializeField] private List<ScriptableEnum> icons;
     [field:SerializeField] public BuildingType type { get; private set; }
 
+    private void Awake()
+    {
+        staticIcons.Clear();
+    }
 
     private void Start()
     {
-        if (staticIcons == null) staticIcons = new List<ScriptableEnum>(icons);
+        if (staticIcons.Count == 0) staticIcons = new List<ScriptableEnum>(icons);
 
         var icon = staticIcons.GetRandomItem();
         staticIcons.Remove(icon);

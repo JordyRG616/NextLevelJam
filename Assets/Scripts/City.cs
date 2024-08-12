@@ -7,6 +7,7 @@ public class City : MonoBehaviour
     [SerializeField] private ScriptableSignal OnGameWon;
     [SerializeField] private List<Sprite> cityStages;
     [SerializeField] private SpriteRenderer cityRenderer;
+    [SerializeField] private SFXPlayer buildSfx;
     
     private List<BuildingType> typesInCity = new List<BuildingType>();
     private int cityLevel;
@@ -18,6 +19,7 @@ public class City : MonoBehaviour
             typesInCity.Add(connectedBuilding);
             cityLevel++;
             cityRenderer.sprite = cityStages[cityLevel];
+            buildSfx.Play();
 
             if(cityLevel == 4)
             {

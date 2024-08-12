@@ -6,6 +6,7 @@ public class DominoSet : MonoBehaviour
 {
     [SerializeField] private ScriptableSignal OnDominoPlayed;
     [SerializeField] private ScriptableSignal OnGameOver;
+    [SerializeField] private SFXPlayer drawSfx;
     [Space]
     [SerializeField] private Domino dominoModel;
     [SerializeField] private Transform hand;
@@ -13,7 +14,7 @@ public class DominoSet : MonoBehaviour
     [SerializeField] private List<ScriptableEnum> icons;
 
 
-    private void Start()
+    private IEnumerator Start()
     {
         CreateDeck();
         CreateDeck();
@@ -21,6 +22,7 @@ public class DominoSet : MonoBehaviour
         for (int i = 0; i < handSize; i++)
         {
             Draw();
+            yield return new WaitForSeconds(.2f);
         }
 
         OnDominoPlayed.Register(CheckDraw);
@@ -29,7 +31,10 @@ public class DominoSet : MonoBehaviour
     private void CheckDraw()
     {
         Draw();
+    }
 
+    private void Update()
+    {
         if (transform.childCount == 0 && hand.childCount == 0)
         {
             OnGameOver.Fire();
@@ -60,5 +65,6 @@ public class DominoSet : MonoBehaviour
         var piece = transform.GetChild(rdm);
         piece.SetParent(hand);
         piece.localScale = Vector3.one;
+        drawSfx.Play();
     }
 }

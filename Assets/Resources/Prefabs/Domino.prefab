@@ -738,6 +738,9 @@ MonoBehaviour:
     half: {fileID: 721834772136796457}
   placed: 0
   outline: {fileID: 417863164135887276}
+  placedSfx: {fileID: 11400000, guid: d98c3cd8152904f4d8069461f176b42a, type: 2}
+  hoverSfx: {fileID: 11400000, guid: e73373a86fc517b4d8d2bf5fbba7dbd9, type: 2}
+  connected: 0
 --- !u!1 &5618769165852218467
 GameObject:
   m_ObjectHideFlags: 0
